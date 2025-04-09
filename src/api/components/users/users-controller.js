@@ -191,45 +191,6 @@ async function deleteUser(request, response, next) {
   }
 }
 
-async function login(request, response, next) {
-  try {
-    const { email, password } = request.body;
-
-    if (!email) {
-      throw errorResponder(errorTypes.VALIDATION_ERROR, 'Email is required');
-    }
-
-    if (!password) {
-      throw errorResponder(errorTypes.VALIDATION_ERROR, 'Password is required');
-    }
-
-    const user = await usersService.getUserByEmail(email);
-
-    if (!user) {
-      throw errorResponder(
-        errorTypes.INVALID_CREDENTIALS,
-        'Invalid email/password error403'
-      );
-    }
-
-    const isPasswordCorrect = await password(password, user.password);
-
-    if (!isPasswordCorrect) {
-      throw errorResponder(
-        errorTypes.INVALID_CREDENTIALS,
-        'Invalid email/password error 403'
-      );
-    }
-
-    return response.status(200).json({
-      status: 'success',
-      message: 'Login successful',
-    });
-  } catch (error) {
-    return next(error);
-  }
-}
-
 module.exports = {
   getUsers,
   getUser,
@@ -237,5 +198,4 @@ module.exports = {
   updateUser,
   changePassword,
   deleteUser,
-  login,
 };
